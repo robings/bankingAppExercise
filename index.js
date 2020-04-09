@@ -5,7 +5,7 @@ const bodyParser =  require('body-parser');
 const app = express();
 const PORT = 4000;
 const dbName = 'hipposBank';
-const collectionAccounts = 'acCounts';
+const collectionAccounts = 'accounts';
 
 const url = 'mongodb://localhost:27017';
 
