@@ -5,7 +5,7 @@ const bodyParser =  require('body-parser');
 const app = express();
 const PORT = 4000;
 const dbName = 'hipposBank';
-const collectionAccounts = 'accounts';
+const collectionAccounts = 'acCounts';
 
 const url = 'mongodb://localhost:27017';
 
@@ -30,9 +30,8 @@ app.get('/accounts', (req, res) => {
             response.success = false;
             response.message = 'Could not retrieve accounts';
             response.data = [];
-            status=401;
+            status=404;
         }
-
 
         await res.status(status).send(response);
     });
