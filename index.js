@@ -68,11 +68,11 @@ app.post('/accounts', (req, res) => {
             console.log(docs.insertedCount)
             if (docs.insertedCount === 1) {
                 response.success = true;
-                response.message = 'Accounts successfully created';
+                response.message = 'Accounts successfully added';
                 status=200;
             } else {
                 response.success = false;
-                response.message = 'Could not create account';
+                response.message = 'Could not add account';
                 status=404;
             }
         res.status(status).send(response)

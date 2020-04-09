@@ -52,7 +52,8 @@ Export of "accounts" collection to json available in db folder.
     **Error response:**
   
     **Code:** 404
-    ```{
+    ```
+    {
         "success": false,
         "message": "Could not retrieve accounts",
         "data": []
@@ -80,3 +81,21 @@ Export of "accounts" collection to json available in db folder.
 * **Success Response:**
 
     **Code:** 200
+    ```
+    {
+        "success": true,
+        "message": "Accounts successfully added",
+        "data": []
+    }
+    ```
+  
+  **Error response:**
+    
+    **Code:** 404
+    ```
+    {
+      "success": false,
+      "message": "Could not add account",
+      "data": []
+    }
+    ```
