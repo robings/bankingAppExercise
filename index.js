@@ -55,7 +55,8 @@ let getUsers = async(db) => {
 app.post('/accounts', (req, res) => {
     const dataToSend = {
         name: req.body.name,
-        balance: req.body.balance
+        balance: req.body.balance,
+        deleted: false
     };
 
     MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, async (err, client) => {
