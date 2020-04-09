@@ -43,8 +43,6 @@ let getUsers = async(db) => {
     return result
 };
 
-
-
 app.listen(PORT, ()=> {
     console.log(`Hippos Banking App listening on port ${PORT}`);
 })
