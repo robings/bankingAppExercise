@@ -49,7 +49,7 @@ Export of "accounts" collection to json available in db folder.
       }
     ```
   
-    **Error response:**
+* **Error response:**
   
     **Code:** 404
     ```
@@ -89,7 +89,7 @@ Export of "accounts" collection to json available in db folder.
     }
     ```
   
-  **Error response:**
+* **Error response:**
     
     **Code:** 404
     ```
@@ -129,13 +129,51 @@ Export of "accounts" collection to json available in db folder.
       }
       ```
     
-    **Error response:**
+  * **Error response:**
       
       **Code:** 404
       ```
       {
         "success": false,
         "message": "Could not update balance",
+        "data": []
+      }
+      ```
+    
+## Delete Account
+  
+  * **URL:** /accounts
+  
+  * **Method:** `DELETE`
+  
+  * **URL Params:**
+  
+      required: none
+  
+  * **Data Params:**
+   
+      { "id": "5e8f19ec3a6e79194b335667" }
+  
+      "id" - the MongoDb ObjectId
+  
+  * **Success Response:**
+  
+      **Code:** 200
+      ```
+      {
+          "success": true,
+          "message": "Account successfully deleted",
+          "data": []
+      }
+      ```
+    
+  * **Error response:**
+      
+      **Code:** 404
+      ```
+      {
+        "success": false,
+        "message": "Could not delete account",
         "data": []
       }
       ```
