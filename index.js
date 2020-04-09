@@ -1,7 +1,7 @@
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;
-const bodyParser =  require('body-parser');
+const bodyParser = require('body-parser');
 const app = express();
 const PORT = 4000;
 const dbName = 'hipposBank';
@@ -24,31 +24,53 @@ app.get('/', (req, res) => {
 
 //route to get all accounts
 app.get('/accounts', (req, res) => {
+    let filterOperand;
+    let filterValue;
+    if (req.query.gt) {
+        filterValue = req.query.gt;
+        filterOperand = 'gt'
+    }
+    if (req.query.lt) {
+        filterValue = req.query.lt
+        filterOperand = 'lt'
+    }
+
     MongoClient.connect(url, {useUnifiedTopology: true}, async (err, client) => {
         let db = client.db(dbName);
-        let accountsReturned = await getUsers(db);
+        let accountsReturned = await getAccounts(db, filterOperand, filterValue);
         let response = responseTemplate;
         let status;
         if (accountsReturned.length > 0) {
             response.success = true;
             response.message = 'Accounts retrieved';
             response.data = accountsReturned;
-            status=200;
+            status = 200;
         } else {
             response.success = false;
             response.message = 'Could not retrieve accounts';
             response.data = [];
-            status=404;
+            status = 404;
         }
 
         await res.status(status).send(response);
     });
 });
 
-let getUsers = async(db) => {
+let getAccounts = async(db, filterOperand, filterValue) => {
     let collection = db.collection(collectionAccounts);
-    let result = await collection.find({deleted:false}).toArray();
-    return result
+    let result;
+
+    if (filterOperand && filterValue) {
+        if (filterOperand === 'gt') {
+        result = await collection.find({$and: [{deleted:false}, {balance: {$gt: parseInt(filterValue)}}]}).toArray();
+        } else if (filterOperand === 'lt') {
+        result = await collection.find({$and: [{deleted:false}, {balance: {$lt: parseInt(filterValue)}}]}).toArray();
+        }
+    } else {
+        result = await collection.find({deleted:false}).toArray();
+    }
+
+    return result;
 };
 
 //route to add an account
@@ -60,22 +82,24 @@ app.post('/accounts', (req, res) => {
     };
 
     MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, async (err, client) => {
-        console.log ('Connect to MongoDb');
+        console.log ('Connected to MongoDb');
 
         let db = client.db(dbName);
         let response = responseTemplate;
         let status;
         let docs = await insertDataInDb(db, dataToSend);
-            console.log(docs.insertedCount)
-            if (docs.insertedCount === 1) {
-                response.success = true;
-                response.message = 'Account successfully added';
-                status=200;
-            } else {
-                response.success = false;
-                response.message = 'Could not add account';
-                status=404;
-            }
+
+        if (docs.insertedCount === 1) {
+            response.success = true;
+            response.message = 'Account successfully added';
+            response.data = [];
+            status = 200;
+        } else {
+            response.success = false;
+            response.message = 'Could not add account';
+            response.data = [];
+            status = 404;
+        }
         res.status(status).send(response)
         client.close()
     })
@@ -95,20 +119,21 @@ app.put('/accounts', (req, res) => {
     };
 
     MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, async (err, client) => {
-        console.log ('Connect to MongoDb');
+        console.log ('Connected to MongoDb');
 
         let db = client.db(dbName);
         let response = responseTemplate;
         let status;
         let docs = await updateBalanceInDb(db, dataToSend);
-        console.log(docs.modifiedCount)
         if (docs.modifiedCount === 1) {
             response.success = true;
             response.message = 'Account balance successfully updated';
+            response.data = [];
             status=200;
         } else {
             response.success = false;
             response.message = 'Could not update balance';
+            response.data = [];
             status=404;
         }
         res.status(status).send(response)
@@ -129,20 +154,21 @@ app.delete('/accounts', (req, res) => {
     };
 
     MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, async (err, client) => {
-        console.log ('Connect to MongoDb');
+        console.log ('Connected to MongoDb');
 
         let db = client.db(dbName);
         let response = responseTemplate;
         let status;
         let docs = await softDeleteAccountFromDb(db, dataToSend);
-        console.log(docs.modifiedCount)
         if (docs.modifiedCount === 1) {
             response.success = true;
             response.message = 'Account successfully deleted';
+            response.data = [];
             status=200;
         } else {
             response.success = false;
             response.message = 'Could not delete account';
+            response.data = [];
             status=404;
         }
         res.status(status).send(response)

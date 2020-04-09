@@ -2,7 +2,7 @@
 
 An exercise to build routes for a simple Banking App using node and express.
 
-WARNING: Completely unsuitable for using for real banking!
+:heavy_exclamation_mark: WARNING: Completely unsuitable for using for real banking.
 
 Requirements:
 MongoDb database "hipposBank" with "accounts" collection.
@@ -13,11 +13,19 @@ Export of "accounts" collection to json available in db folder.
 ##  Get All Accounts
 * **URL:** /accounts
 
-* **Method:** GET
+* **Method:** `GET`
 
-* **URL Params:** required: none
+* **URL Params:** 
+    
+    **required:** none
+    
+    **optional**
+     
+        gt=[integer] - returns all accounts where balance is greater than the specified integer
+        
+        lt=[integer] - returns all accounts where balance is greater than the specified integer
 
-* **Data Params:** none
+* **Data Params:**
 
 * **Success Response:**
 
@@ -68,7 +76,7 @@ Export of "accounts" collection to json available in db folder.
 
 * **URL Params:**
 
-    required: none
+    **required:** none
 
 * **Data Params:**
  
@@ -108,7 +116,7 @@ Export of "accounts" collection to json available in db folder.
   
   * **URL Params:**
   
-      required: none
+      **required:** none
   
   * **Data Params:**
    
@@ -148,7 +156,7 @@ Export of "accounts" collection to json available in db folder.
   
   * **URL Params:**
   
-      required: none
+      **required:** none
   
   * **Data Params:**
    
