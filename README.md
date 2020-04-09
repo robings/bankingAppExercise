@@ -84,7 +84,7 @@ Export of "accounts" collection to json available in db folder.
     ```
     {
         "success": true,
-        "message": "Accounts successfully added",
+        "message": "Account successfully added",
         "data": []
     }
     ```
@@ -99,3 +99,43 @@ Export of "accounts" collection to json available in db folder.
       "data": []
     }
     ```
+  
+  ## Update Account Balance
+  
+  * **URL:** /accounts
+  
+  * **Method:** `PUT`
+  
+  * **URL Params:**
+  
+      required: none
+  
+  * **Data Params:**
+   
+      { "id": "5e8f19ec3a6e79194b335667", "balance": 1200}
+  
+      "id" - the MongoDb ObjectId
+  
+      "balance" - the updated balance
+  
+  * **Success Response:**
+  
+      **Code:** 200
+      ```
+      {
+          "success": true,
+          "message": "Account balance successfully updated",
+          "data": []
+      }
+      ```
+    
+    **Error response:**
+      
+      **Code:** 404
+      ```
+      {
+        "success": false,
+        "message": "Could not update balance",
+        "data": []
+      }
+      ```

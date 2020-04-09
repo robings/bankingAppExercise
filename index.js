@@ -69,7 +69,7 @@ app.post('/accounts', (req, res) => {
             console.log(docs.insertedCount)
             if (docs.insertedCount === 1) {
                 response.success = true;
-                response.message = 'Accounts successfully added';
+                response.message = 'Account successfully added';
                 status=200;
             } else {
                 response.success = false;
@@ -85,6 +85,41 @@ let insertDataInDb = async (db, dataToSend) => {
         let collection = db.collection(collectionAccounts);
         let results = await collection.insertOne(dataToSend);
         return results;
+}
+
+//route to edit balance of account
+app.put('/accounts', (req, res) => {
+    const dataToSend = {
+        id: ObjectId(req.body.id),
+        balance: req.body.balance,
+    };
+
+    MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, async (err, client) => {
+        console.log ('Connect to MongoDb');
+
+        let db = client.db(dbName);
+        let response = responseTemplate;
+        let status;
+        let docs = await updateBalanceInDb(db, dataToSend);
+        console.log(docs.modifiedCount)
+        if (docs.modifiedCount === 1) {
+            response.success = true;
+            response.message = 'Account balance successfully updated';
+            status=200;
+        } else {
+            response.success = false;
+            response.message = 'Could not update balance';
+            status=404;
+        }
+        res.status(status).send(response)
+        client.close()
+    })
+})
+
+let updateBalanceInDb = async (db, dataToSend) => {
+    let collection = db.collection(collectionAccounts);
+    let results = await collection.updateOne({_id:dataToSend.id}, {$set: {balance: dataToSend.balance}});
+    return results;
 }
 
 app.listen(PORT, ()=> {
