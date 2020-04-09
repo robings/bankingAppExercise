@@ -2,7 +2,7 @@
 
 An exercise to build routes for a simple Banking App using node and express.
 
-:heavy_exclamation_mark: WARNING: Completely unsuitable for using for real banking!
+:heavy_exclamation_mark: WARNING: Completely unsuitable for using for real banking.
 
 Requirements:
 MongoDb database "hipposBank" with "accounts" collection.
