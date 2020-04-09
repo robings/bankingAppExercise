@@ -122,6 +122,40 @@ let updateBalanceInDb = async (db, dataToSend) => {
     return results;
 }
 
+//route to soft delete an account
+app.delete('/accounts', (req, res) => {
+    const dataToSend = {
+        id: ObjectId(req.body.id)
+    };
+
+    MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, async (err, client) => {
+        console.log ('Connect to MongoDb');
+
+        let db = client.db(dbName);
+        let response = responseTemplate;
+        let status;
+        let docs = await softDeleteAccountFromDb(db, dataToSend);
+        console.log(docs.modifiedCount)
+        if (docs.modifiedCount === 1) {
+            response.success = true;
+            response.message = 'Account successfully deleted';
+            status=200;
+        } else {
+            response.success = false;
+            response.message = 'Could not delete account';
+            status=404;
+        }
+        res.status(status).send(response)
+        client.close()
+    })
+})
+
+let softDeleteAccountFromDb = async (db, dataToSend) => {
+    let collection = db.collection(collectionAccounts);
+    let results = await collection.updateOne({_id:dataToSend.id}, {$set: {deleted: true}});
+    return results;
+}
+
 app.listen(PORT, ()=> {
     console.log(`Hippos Banking App listening on port ${PORT}`);
 })
