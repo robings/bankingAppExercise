@@ -44,12 +44,12 @@ app.get('/accounts', (req, res) => {
             response.success = true;
             response.message = 'Accounts retrieved';
             response.data = accountsReturned;
-            status=200;
+            status = 200;
         } else {
             response.success = false;
             response.message = 'Could not retrieve accounts';
             response.data = [];
-            status=404;
+            status = 404;
         }
 
         await res.status(status).send(response);
@@ -82,22 +82,24 @@ app.post('/accounts', (req, res) => {
     };
 
     MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, async (err, client) => {
-        console.log ('Connect to MongoDb');
+        console.log ('Connected to MongoDb');
 
         let db = client.db(dbName);
         let response = responseTemplate;
         let status;
         let docs = await insertDataInDb(db, dataToSend);
-            console.log(docs.insertedCount)
-            if (docs.insertedCount === 1) {
-                response.success = true;
-                response.message = 'Account successfully added';
-                status=200;
-            } else {
-                response.success = false;
-                response.message = 'Could not add account';
-                status=404;
-            }
+
+        if (docs.insertedCount === 1) {
+            response.success = true;
+            response.message = 'Account successfully added';
+            response.data = [];
+            status = 200;
+        } else {
+            response.success = false;
+            response.message = 'Could not add account';
+            response.data = [];
+            status = 404;
+        }
         res.status(status).send(response)
         client.close()
     })
@@ -117,20 +119,21 @@ app.put('/accounts', (req, res) => {
     };
 
     MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, async (err, client) => {
-        console.log ('Connect to MongoDb');
+        console.log ('Connected to MongoDb');
 
         let db = client.db(dbName);
         let response = responseTemplate;
         let status;
         let docs = await updateBalanceInDb(db, dataToSend);
-        console.log(docs.modifiedCount)
         if (docs.modifiedCount === 1) {
             response.success = true;
             response.message = 'Account balance successfully updated';
+            response.data = [];
             status=200;
         } else {
             response.success = false;
             response.message = 'Could not update balance';
+            response.data = [];
             status=404;
         }
         res.status(status).send(response)
@@ -151,20 +154,21 @@ app.delete('/accounts', (req, res) => {
     };
 
     MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, async (err, client) => {
-        console.log ('Connect to MongoDb');
+        console.log ('Connected to MongoDb');
 
         let db = client.db(dbName);
         let response = responseTemplate;
         let status;
         let docs = await softDeleteAccountFromDb(db, dataToSend);
-        console.log(docs.modifiedCount)
         if (docs.modifiedCount === 1) {
             response.success = true;
             response.message = 'Account successfully deleted';
+            response.data = [];
             status=200;
         } else {
             response.success = false;
             response.message = 'Could not delete account';
+            response.data = [];
             status=404;
         }
         res.status(status).send(response)
