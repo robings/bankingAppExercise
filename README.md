@@ -1,4 +1,4 @@
-#Hippos Banking App
+# Hippos Banking App
 
 An exercise to build routes for a simple Banking App using node and express.
 
@@ -8,50 +8,94 @@ Requirements:
 MongoDb database "hipposBank" with "accounts" collection.
 Export of "accounts" collection to json available in db folder.
 
-#API Endpoints (Routes)
+# API Endpoints (Routes)
 
-##Get All Accounts
-URL: /accounts
+##  Get All Accounts
+* **URL:** /accounts
 
-Method: GET
+* **Method:** GET
 
-URL Params: none
+* **URL Params:** required: none
 
-Data Params: none
+* **Data Params:** none
 
-Success Response:
+* **Success Response:**
 
-Code: 200
-``{
-      "success": true,
-      "message": "Accounts retrieved",
-      "data": [
-          {
-              "_id": "5e8ee8b135fc7507b6c0136a",
-              "name": "Cuthbert",
-              "balance": 24000,
-              "deleted": false
-          },
-          {
-              "_id": "5e8ee8e235fc7507b6c0136b",
-              "name": "Dibble",
-              "balance": 12000,
-              "deleted": false
-          },
-          {
-              "_id": "5e8ee8fe35fc7507b6c0136c",
-              "name": "Grub",
-              "balance": 30000,
-              "deleted": false
-          }
-      ]
-  }``
+    **Code:** 200
+    ```
+    {
+          "success": true,
+          "message": "Accounts retrieved",
+          "data": [
+              {
+                  "_id": "5e8ee8b135fc7507b6c0136a",
+                  "name": "Cuthbert",
+                  "balance": 24000,
+                  "deleted": false
+              },
+              {
+                  "_id": "5e8ee8e235fc7507b6c0136b",
+                  "name": "Dibble",
+                  "balance": 12000,
+                  "deleted": false
+              },
+              {
+                  "_id": "5e8ee8fe35fc7507b6c0136c",
+                  "name": "Grub",
+                  "balance": 30000,
+                  "deleted": false
+              }
+          ]
+      }
+    ```
   
-  Error response:
+    **Error response:**
   
-  Code: 404
-  ``{
+    **Code:** 404
+    ```
+    {
         "success": false,
         "message": "Could not retrieve accounts",
         "data": []
-    }``
+    }
+    ```
+
+## Add Account
+
+* **URL:** /accounts
+
+* **Method:** `POST`
+
+* **URL Params:**
+
+    required: none
+
+* **Data Params:**
+ 
+    { "name": "Cuthbert", "balance":1500}
+
+    "name" - name of the account holder
+
+    "balance" - the balance of the new account
+
+* **Success Response:**
+
+    **Code:** 200
+    ```
+    {
+        "success": true,
+        "message": "Accounts successfully added",
+        "data": []
+    }
+    ```
+  
+  **Error response:**
+    
+    **Code:** 404
+    ```
+    {
+      "success": false,
+      "message": "Could not add account",
+      "data": []
+    }
+    ```

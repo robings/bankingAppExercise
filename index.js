@@ -9,17 +9,25 @@ const collectionAccounts = 'accounts';
 
 const url = 'mongodb://localhost:27017';
 
+const responseTemplate = {
+    success: false,
+    message: '',
+    data: []
+}
+
 app.use(bodyParser.json());
 
+//landing route
 app.get('/', (req, res) => {
-    res.send('<h1>Hippos Banking App</h1>');
+    res.send('<h1>Hippos Banking App</h1>use url /accounts to use the API');
 })
 
+//route to get all accounts
 app.get('/accounts', (req, res) => {
     MongoClient.connect(url, {useUnifiedTopology: true}, async (err, client) => {
         let db = client.db(dbName);
         let accountsReturned = await getUsers(db);
-        let response = {};
+        let response = responseTemplate;
         let status;
         if (accountsReturned.length > 0) {
             response.success = true;
@@ -42,6 +50,41 @@ let getUsers = async(db) => {
     let result = await collection.find({deleted:false}).toArray();
     return result
 };
+
+//route to add an account
+app.post('/accounts', (req, res) => {
+    const dataToSend = {
+        name: req.body.name,
+        balance: req.body.balance
+    };
+
+    MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, async (err, client) => {
+        console.log ('Connect to MongoDb');
+
+        let db = client.db(dbName);
+        let response = responseTemplate;
+        let status;
+        let docs = await insertDataInDb(db, dataToSend);
+            console.log(docs.insertedCount)
+            if (docs.insertedCount === 1) {
+                response.success = true;
+                response.message = 'Accounts successfully added';
+                status=200;
+            } else {
+                response.success = false;
+                response.message = 'Could not add account';
+                status=404;
+            }
+        res.status(status).send(response)
+        client.close()
+    })
+})
+
+let insertDataInDb = async (db, dataToSend) => {
+        let collection = db.collection(collectionAccounts);
+        let results = await collection.insertOne(dataToSend);
+        return results;
+}
 
 app.listen(PORT, ()=> {
     console.log(`Hippos Banking App listening on port ${PORT}`);
