@@ -1,7 +1,7 @@
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;
-const bodyParser =  require('body-parser');
+const bodyParser = require('body-parser');
 const app = express();
 const PORT = 4000;
 const dbName = 'hipposBank';
@@ -24,9 +24,20 @@ app.get('/', (req, res) => {
 
 //route to get all accounts
 app.get('/accounts', (req, res) => {
+    let filterOperand;
+    let filterValue;
+    if (req.query.gt) {
+        filterValue = req.query.gt;
+        filterOperand = 'gt'
+    }
+    if (req.query.lt) {
+        filterValue = req.query.lt
+        filterOperand = 'lt'
+    }
+
     MongoClient.connect(url, {useUnifiedTopology: true}, async (err, client) => {
         let db = client.db(dbName);
-        let accountsReturned = await getUsers(db);
+        let accountsReturned = await getAccounts(db, filterOperand, filterValue);
         let response = responseTemplate;
         let status;
         if (accountsReturned.length > 0) {
@@ -45,10 +56,21 @@ app.get('/accounts', (req, res) => {
     });
 });
 
-let getUsers = async(db) => {
+let getAccounts = async(db, filterOperand, filterValue) => {
     let collection = db.collection(collectionAccounts);
-    let result = await collection.find({deleted:false}).toArray();
-    return result
+    let result;
+
+    if (filterOperand && filterValue) {
+        if (filterOperand === 'gt') {
+        result = await collection.find({$and: [{deleted:false}, {balance: {$gt: parseInt(filterValue)}}]}).toArray();
+        } else if (filterOperand === 'lt') {
+        result = await collection.find({$and: [{deleted:false}, {balance: {$lt: parseInt(filterValue)}}]}).toArray();
+        }
+    } else {
+        result = await collection.find({deleted:false}).toArray();
+    }
+
+    return result;
 };
 
 //route to add an account
