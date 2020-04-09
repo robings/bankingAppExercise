@@ -20,18 +20,12 @@ Export of "accounts" collection to json available in db folder.
     **required:** none
     
     **optional**
+     
+        `gt=[integer]`        
+        - returns all accounts where balance is greater than the specified integer
         
-        ```
-        gt=[integer]
-        ```
-        
-        returns all accounts where balance is greater than the specified integer
-        
-        ```
-        lt=[integer]
-        ```
-        
-        returns all accounts where balance is greater than the specified integer
+        `lt=[integer]`        
+        - returns all accounts where balance is greater than the specified integer
 
 * **Data Params:**
 
