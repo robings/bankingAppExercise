@@ -18,8 +18,23 @@ app.get('/', (req, res) => {
 app.get('/accounts', (req, res) => {
     MongoClient.connect(url, {useUnifiedTopology: true}, async (err, client) => {
         let db = client.db(dbName);
-        let documentsReturned = await getUsers(db);
-        await res.send(documentsReturned);
+        let accountsReturned = await getUsers(db);
+        let response = {};
+        let status;
+        if (accountsReturned.length > 0) {
+            response.success = true;
+            response.message = 'Accounts retrieved';
+            response.data = accountsReturned;
+            status=200;
+        } else {
+            response.success = false;
+            response.message = 'Could not retrieve accounts';
+            response.data = [];
+            status=401;
+        }
+
+
+        await res.status(status).send(response);
     });
 });
 
