@@ -86,9 +86,6 @@ let insertDataInDb = async (db, dataToSend) => {
         return results;
 }
 
-
-
-
 app.listen(PORT, ()=> {
     console.log(`Hippos Banking App listening on port ${PORT}`);
 })
