@@ -1,4 +1,4 @@
-#Hippos Banking App
+# Hippos Banking App
 
 An exercise to build routes for a simple Banking App using node and express.
 
@@ -8,9 +8,9 @@ Requirements:
 MongoDb database "hipposBank" with "accounts" collection.
 Export of "accounts" collection to json available in db folder.
 
-#API Endpoints (Routes)
+# API Endpoints (Routes)
 
-##Get All Accounts
+##  Get All Accounts
 URL: /accounts
 
 Method: GET
@@ -22,7 +22,8 @@ Data Params: none
 Success Response:
 
 Code: 200
-``{
+```
+{
       "success": true,
       "message": "Accounts retrieved",
       "data": [
@@ -45,13 +46,15 @@ Code: 200
               "deleted": false
           }
       ]
-  }``
+  }
+```
   
   Error response:
   
   Code: 404
-  ``{
+  ```{
         "success": false,
         "message": "Could not retrieve accounts",
         "data": []
-    }``
+    }
+```
