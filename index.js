@@ -9,6 +9,12 @@ const collectionAccounts = 'accounts';
 
 const url = 'mongodb://localhost:27017';
 
+const responseTemplate = {
+    success: false,
+    message: '',
+    data: []
+}
+
 app.use(bodyParser.json());
 
 //landing route
@@ -21,7 +27,7 @@ app.get('/accounts', (req, res) => {
     MongoClient.connect(url, {useUnifiedTopology: true}, async (err, client) => {
         let db = client.db(dbName);
         let accountsReturned = await getUsers(db);
-        let response = {};
+        let response = responseTemplate;
         let status;
         if (accountsReturned.length > 0) {
             response.success = true;
@@ -55,25 +61,29 @@ app.post('/accounts', (req, res) => {
     MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, async (err, client) => {
         console.log ('Connect to MongoDb');
 
-        let db = client.db(dbName)
-
-        //run a function that adds data to db
+        let db = client.db(dbName);
+        let response = responseTemplate;
+        let status;
         let docs = await insertDataInDb(db, dataToSend);
+            console.log(docs.insertedCount)
             if (docs.insertedCount === 1) {
-                res.send('It Worked')
+                response.success = true;
+                response.message = 'Accounts successfully created';
+                status=200;
             } else {
-                res.send('It did nay work')
+                response.success = false;
+                response.message = 'Could not create account';
+                status=404;
             }
-            client.close()
+        res.status(status).send(response)
+        client.close()
     })
 })
 
 let insertDataInDb = async (db, dataToSend) => {
         let collection = db.collection(collectionAccounts);
-        collection.insertOne(dataToSend, (err, docs) => {
-           console.log (docs);
-        })
-        return await didItWork;
+        let results = await collection.insertOne(dataToSend);
+        return results;
 }
 
 
