@@ -112,11 +112,11 @@ Export of "accounts" collection to json available in db folder.
   
   * **Data Params:**
    
-      { "id": "5e8f19ec3a6e79194b335667", "balance": 1200}
+      { "id": "5e8f19ec3a6e79194b335667", "addToBalance": 200}
   
       "id" - the MongoDb ObjectId
   
-      "balance" - the updated balance
+      "balance" - the amount to add
   
   * **Success Response:**
   

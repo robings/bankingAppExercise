@@ -91,7 +91,7 @@ let insertDataInDb = async (db, dataToSend) => {
 app.put('/accounts', (req, res) => {
     const dataToSend = {
         id: ObjectId(req.body.id),
-        balance: req.body.balance,
+        addToBalance: req.body.addToBalance,
     };
 
     MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, async (err, client) => {
@@ -118,7 +118,7 @@ app.put('/accounts', (req, res) => {
 
 let updateBalanceInDb = async (db, dataToSend) => {
     let collection = db.collection(collectionAccounts);
-    let results = await collection.updateOne({_id:dataToSend.id}, {$set: {balance: dataToSend.balance}});
+    let results = await collection.updateOne({_id:dataToSend.id}, {$inc: {balance: dataToSend.addToBalance}});
     return results;
 }
 
