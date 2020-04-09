@@ -1,0 +1,3 @@
+{"_id":{"$oid":"5e8ee8b135fc7507b6c0136a"},"name":"Cuthbert","balance":{"$numberInt":"24000"}}
+{"_id":{"$oid":"5e8ee8e235fc7507b6c0136b"},"name":"Dibble","balance":{"$numberInt":"12000"}}
+{"_id":{"$oid":"5e8ee8fe35fc7507b6c0136c"},"name":"Grub","balance":{"$numberInt":"30000"}}
